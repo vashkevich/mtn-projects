@@ -1,4 +1,4 @@
 mtn-projects
 ============
 
-Projects for MTN 2013 summer lab
+Projects for MTN 2017 lab
