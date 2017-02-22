@@ -63,8 +63,8 @@
 
   	<target name="zip" depends="dist">
 		<echo>Create zip file (distribution artefact)</echo>
-		<zip destfile="dist_files.zip">
-        		<fileset dir="${dist}/dist_art" includes="**/*.jar"/>
+		<zip destfile="${dist}/dist_files.zip">
+        		<fileset dir="${dist}" includes="**/*.jar"/>
 		</zip>
   	</target>
 </project>
