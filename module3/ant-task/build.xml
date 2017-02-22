@@ -17,46 +17,54 @@
 	<pathelement location="${build}/test"/>
 </path>
 
-  <target name="init">
-    <mkdir dir="${build}"/>
-    <mkdir dir="${build}/test"/>
-  </target>
+	<target name="clean">
+		<echo>Clean your project directory if it contains directories from previous build</echo>
+		<delete dir="${build}"/>
+    		<delete dir="${dist}"/>
+	</target>
 
-  <target name="compile" depends="init" >
-    <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
-    	<classpath refid="sys_lib"/>
-    </javac>
-    <javac srcdir="${test}" destdir="${build}/test" includeantruntime="false">
-	<classpath refid="sys_lib"/>
-    </javac>
-   </target>
+	<target name="init" depends="clean">
+		<echo>Create needed directories for our project</echo>
+		<mkdir dir="${build}"/>
+		<mkdir dir="${build}/test"/>
+		<mkdir dir="${dist}/dist_art"/>
+	</target>
 
-  <target name="test" depends="compile">
-      <junit fork="yes" haltonfailure="yes">
-	<classpath refid="sys_lib"/>
-	<classpath refid="unit_test"/>
-  <batchtest>
-	<fileset dir="${test}"> 
-           <include name="**/*Test*" />
-       	</fileset>
-  </batchtest>
-	<formatter type="brief" usefile="false"/>
-      </junit>
+	<target name="compile" depends="init">
+		<echo>Compile project files</echo>
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+    			<classpath refid="sys_lib"/>
+    		</javac>
+		<echo>Compile unit-tests files</echo>
+    		<javac srcdir="${test}" destdir="${build}/test" includeantruntime="false">
+			<classpath refid="sys_lib"/>
+   		</javac>
+   	</target>
 
-  </target>
+	<target name="test" depends="compile">
+		<echo>Try to test your project with unit-tests</echo>
+		<junit fork="yes" haltonfailure="yes">
+			<classpath refid="sys_lib"/>
+			<classpath refid="unit_test"/>
+			<batchtest>
+				<fileset dir="${test}"> 
+           				<include name="**/*Test*" />
+       				</fileset>
+  			</batchtest>
+			<formatter type="brief" usefile="false"/>
+     		 </junit>
+	</target>
+	
 	<target name="dist" depends="test">
-	<mkdir dir="${dist}"/>
-	<jar jarfile="${dist}/task3.jar" basedir="${build}"/>
-  </target>
+		<echo>Make dist project file</echo>
+		<mkdir dir="${dist}"/>
+		<jar jarfile="${dist}/task3.jar" basedir="${build}"/>
+  	</target>
 
-  <target name="zip" depends="dist">
-	<zip destfile="dist_files.zip">
-        <fileset dir="${dist}" includes="**/*.jar"/>
-	</zip>
-  </target>
-
-  <target name="clean">
-    <delete dir="${build}"/>
-    <delete dir="${dist}"/>
-  </target>
+  	<target name="zip" depends="dist">
+		<echo>Create zip file (distribution artefact)</echo>
+		<zip destfile="dist_files.zip">
+        		<fileset dir="${dist}/dist_art" includes="**/*.jar"/>
+		</zip>
+  	</target>
 </project>
