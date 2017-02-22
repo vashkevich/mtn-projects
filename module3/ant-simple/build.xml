@@ -17,7 +17,7 @@
     <jar jarfile="${dist}/lib/testProject.jar" basedir="${build}"/>
   </target>
 
-  <target name="clean">
+  <target name="clean" depends="dist">
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
   </target>

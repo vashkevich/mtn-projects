@@ -1,0 +1,62 @@
+<project name="task3" default="zip" basedir=".">
+
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="test"  location="test"/>
+  <property name="lib"  location="lib"/>
+
+<path id="sys_lib">
+	<fileset dir="${lib}" includes="commons-collections-3.2.1.jar"/>
+	<fileset dir="${lib}" includes="hamcrest-core-1.3.jar"/>
+	<fileset dir="${lib}" includes="junit-4.11.jar"/>
+</path>
+
+<path id="unit_test">
+	<pathelement location="${build}"/>
+	<pathelement location="${build}/test"/>
+</path>
+
+  <target name="init">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/test"/>
+  </target>
+
+  <target name="compile" depends="init" >
+    <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+    	<classpath refid="sys_lib"/>
+    </javac>
+    <javac srcdir="${test}" destdir="${build}/test" includeantruntime="false">
+	<classpath refid="sys_lib"/>
+    </javac>
+   </target>
+
+  <target name="test" depends="compile">
+      <junit fork="yes" haltonfailure="yes">
+	<classpath refid="sys_lib"/>
+	<classpath refid="unit_test"/>
+  <batchtest>
+	<fileset dir="${test}"> 
+           <include name="**/*Test*" />
+       	</fileset>
+  </batchtest>
+	<formatter type="brief" usefile="false"/>
+      </junit>
+
+  </target>
+	<target name="dist" depends="test">
+	<mkdir dir="${dist}"/>
+	<jar jarfile="${dist}/task3.jar" basedir="${build}"/>
+  </target>
+
+  <target name="zip" depends="dist">
+	<zip destfile="dist_files.zip">
+        <fileset dir="${dist}" includes="**/*.jar"/>
+	</zip>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
