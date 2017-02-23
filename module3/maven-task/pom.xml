@@ -3,48 +3,61 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
 <properties>
+	<!-- Set encoding type as UTF-8-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<!-- Set new format for timestamp-->
+    <timestamp>${maven.build.timestamp}</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss '-' z</maven.build.timestamp.format>
 </properties>
-	
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mtn.training</groupId>
     <artifactId>ci-training</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>maven-task</name>
-<dependencies>	
- <dependency>
-     <groupId>junit</groupId>
-     <artifactId>junit</artifactId>
-     <version>4.11</version>
- </dependency>
- <dependency>
-     <groupId>commons-collections</groupId>
-     <artifactId>commons-collections</artifactId>
-     <version>3.2.1</version>
- </dependency>
-</dependencies>
-<build>
-<plugins>
- <plugin>
-    <artifactId>maven-assembly-plugin</artifactId>
-    <version>2.5.3</version>
-    <executions>
-        <execution>
-            <phase>package</phase>
-            <goals>
-                <goal>single</goal>
-            </goals>
-            <configuration>
-                    <descriptor>src/assembly/sample.xml</descriptor>
-	    </configuration>
-        </execution>
-    </executions>
-    <configuration>
-        <outputDirectory>${project.build.directory}/assembly/</outputDirectory>
-    </configuration>
-</plugin>
-                 </plugins>
-             </build>
+	<dependencies>	
+		<!-- Here we include library for making UnitTest-->
+ 		<dependency>
+     			<groupId>junit</groupId>
+     			<artifactId>junit</artifactId>
+     			<version>4.11</version>
+ 		</dependency>
+		<!-- Here we include library for compiling our project-->
+ 		<dependency>
+     			<groupId>commons-collections</groupId>
+     			<artifactId>commons-collections</artifactId>
+     			<version>3.2.1</version>
+ 		</dependency>
+	</dependencies>
+	<build>
+	   <plugins>
+		<plugin>
+			<!-- Here we include plugin for making distribution artifact *.tar.gz-->    				<artifactId>maven-assembly-plugin</artifactId>
+    			<version>2.5.3</version>
+    			<executions>
+        			<execution>
+					<!-- Define step to make tar.gz-->
+            				<phase>package</phase>
+            					<goals>
+                					<goal>single</goal>
+            					</goals>
+						<!-- Set descriptor's directory-->
+            					<configuration>
+                    				<descriptor>src/assembly/sample.xml</descriptor>
+	    					</configuration>
+        			</execution>
+    			</executions>
+    			<configuration>
+				<!-- Set output *.tar.gz directory-->
+        			<outputDirectory>${project.build.directory}/assembly/</outputDirectory>
+				<!-- Disable descriptor id in name of *.tar.gz-->
+				<appendAssemblyId>false</appendAssemblyId>
+				<!-- Set name format of *.tar.gz-->
+				<finalName>build-${maven.build.timestamp}</finalName>
+    			</configuration>
+		</plugin>
+           </plugins>
+	</build>
 </project>
